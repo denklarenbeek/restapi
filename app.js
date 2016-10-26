@@ -41,6 +41,9 @@ app.all('*', function(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
     res.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
     res.header('Access-Control-Allow-Origin', '*');
+    if(req.method === "OPTIONS") {
+        return res.status(200).json({});
+      }
     next();
 });
 
