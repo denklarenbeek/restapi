@@ -55,7 +55,7 @@ router.get("/:lID", function(req, res, next) {
 router.put("/:lID", function(req, res, next) {
   req.location.update(req.body, function(err, result){
     if(err) return next(err);
-    res.json(req.body);
+    res.json(result);
   });
 });
 
