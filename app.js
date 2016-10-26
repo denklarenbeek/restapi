@@ -41,7 +41,7 @@ app.all('*', function(request, response, next) {
     response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
     response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
     if(req.method === "OPTIONS") {
-        res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+        res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
         return res.status(200).json({});
       }
     next();
