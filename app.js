@@ -39,7 +39,7 @@ app.use(corser.create({
 app.all('*', function(request, response, next) {
     response.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
     response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
-    response.header('Access-Control-Allow-Origin', '*');
+    response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
     if(req.method === "OPTIONS") {
         res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
         return res.status(200).json({});
