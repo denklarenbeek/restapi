@@ -5,7 +5,6 @@ var app = express();
 var routes = require('./routes');
 var http = require('http');
 var mongoose = require('mongoose');
-var corser = require('corser');
 
 //Parse body into JSON
 var jsonParser = require("body-parser").json;
@@ -31,30 +30,31 @@ db.once("open", function(){
   console.log("db connection succesful setup");
 });
 
-//// Configure CORS (Cross-Origin Resource Sharing) Headers
-// app.use(corser.create({
-//     methods: corser.simpleMethods.concat(["PUT", "DELETE", "OPTIONS"]),
-//     requestHeaders: corser.simpleRequestHeaders.concat(["X-Requested-With"])
-// }));
-// app.all('*', function(request, response, next) {
-//     response.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
-//     response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
-//     response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-//     if(req.method === "OPTIONS") {
-//         res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
-//         return res.status(200).json({});
-//       }
-//     next();
-// });
 
-var handleCORS = function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", '*');
-  res.header("Access-Control-Allow-Headers", 'X-Requested-With, Content-Type');
-  res.header("Acces-Control-Allow-Methods", 'GET, POST, OPTIONS, PUT, DELETE');
-  next();
-}
+// Configure CORS (Cross-Origin Resource Sharing) Headers
+app.use(corser.create({
+    methods: corser.simpleMethods.concat(["PUT", "DELETE", "OPTIONS"]),
+    requestHeaders: corser.simpleRequestHeaders.concat(["X-Requested-With"])
+}));
+app.all('*', function(request, response, next) {
+    response.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
+    response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
+    response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    if(req.method === "OPTIONS") {
+        res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+        return res.status(200).json({});
+      }
+    next();
+});
 
-app.use(handleCORS);
+// var handleCORS = function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", '*');
+//   res.header("Access-Control-Allow-Headers", 'X-Requested-With, Content-Type');
+//   res.header("Acces-Control-Allow-Methods", 'GET, POST, OPTIONS, PUT, DELETE');
+//   next();
+// }
+//
+// app.use(handleCORS);
 
 // app.use('*', function(req, res, next){
 //   res.header("Access-Control-Allow-Origin", "*");
