@@ -32,20 +32,20 @@ db.once("open", function(){
 });
 
 //// Configure CORS (Cross-Origin Resource Sharing) Headers
-app.use(corser.create({
-    methods: corser.simpleMethods.concat(["PUT", "DELETE", "OPTIONS"]),
-    requestHeaders: corser.simpleRequestHeaders.concat(["X-Requested-With"])
-}));
-app.all('*', function(request, response, next) {
-    response.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
-    response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
-    response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-    if(req.method === "OPTIONS") {
-        res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
-        return res.status(200).json({});
-      }
-    next();
-});
+// app.use(corser.create({
+//     methods: corser.simpleMethods.concat(["PUT", "DELETE", "OPTIONS"]),
+//     requestHeaders: corser.simpleRequestHeaders.concat(["X-Requested-With"])
+// }));
+// app.all('*', function(request, response, next) {
+//     response.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
+//     response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
+//     response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+//     if(req.method === "OPTIONS") {
+//         res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+//         return res.status(200).json({});
+//       }
+//     next();
+// });
 
 // var handleCORS = function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", '*');
@@ -56,15 +56,15 @@ app.all('*', function(request, response, next) {
 //
 // app.use(handleCORS);
 
-// app.use('*', function(req, res, next){
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   if(req.method === "OPTIONS") {
-//     res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
+app.use('*', function(req, res, next){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  if(req.method === "OPTIONS") {
+    res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    return res.status(200).json({});
+  }
+  next();
+});
 
 app.use("/locations", routes);
 
