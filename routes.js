@@ -53,7 +53,7 @@ router.get("/:lID", function(req, res, next) {
 //PUT /locations/:lID
 //Edit a specific location
 router.put("/:lID", function(req, res, next) {
-  req.location.update(req.body._id, req.body, function(err, result){
+  req.location.update(req.body, function(err, result){
     if(err) return next(err);
     res.json(req.body);
   });
