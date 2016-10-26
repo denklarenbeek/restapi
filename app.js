@@ -33,7 +33,7 @@ db.once("open", function(){
 
 //// Configure CORS (Cross-Origin Resource Sharing) Headers
 app.use(corser.create({
-    methods: corser.simpleMethods.concat(["PUT", "DELETE"]),
+    methods: corser.simpleMethods.concat(["PUT", "DELETE", "OPTIONS"]),
     requestHeaders: corser.simpleRequestHeaders.concat(["X-Requested-With"])
 }));
 app.all('*', function(request, response, next) {
