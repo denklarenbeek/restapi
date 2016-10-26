@@ -30,15 +30,24 @@ db.once("open", function(){
   console.log("db connection succesful setup");
 });
 
-app.use('*', function(req, res, next){
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  if(req.method === "OPTIONS") {
-    res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-    return res.status(200).json({});
-  }
+var handleCORS = function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Headers", 'X-Requested-With, Content-Type');
+  res.header("Acces-Control-Allow-Methods", 'GET, POST, OPTIONS, PUT, DELETE');
   next();
-});
+}
+
+app.use(handleCORS);
+
+// app.use('*', function(req, res, next){
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   if(req.method === "OPTIONS") {
+//     res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+//     return res.status(200).json({});
+//   }
+//   next();
+// });
 
 app.use("/locations", routes);
 
@@ -61,6 +70,10 @@ app.use(function(err, req, res, next){
 
 var port = process.env.PORT || 3000;
 
-app.listen(port, function(){
+http.createServer(app).listen(port, function(){
   console.log("Express server is listening on port " + port);
 });
+
+// app.listen(port, function(){
+//   console.log("Express server is listening on port " + port);
+// });
