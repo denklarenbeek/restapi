@@ -37,10 +37,10 @@ app.use(corser.create({
     methods: corser.simpleMethods.concat(["PUT", "DELETE", "OPTIONS"]),
     requestHeaders: corser.simpleRequestHeaders.concat(["X-Requested-With"])
 }));
-app.all('*', function(request, response, next) {
-    response.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
-    response.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
-    response.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+app.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With,Authorization,Access-Control-Allow-Origin');
+    res.header('Access-Control-Allow-Methods', 'POST,GET,DELETE');
+    res.header('Access-Control-Allow-Origin', '*');
     if(req.method === "OPTIONS") {
         res.header("Acces-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
         return res.status(200).json({});
