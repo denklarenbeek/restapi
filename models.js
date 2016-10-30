@@ -4,10 +4,15 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
-var pumpwatchSchema = new Schema({
+var PumpwatchSchema = new Schema({
   pw_type:	String,
   q_analog:	Number,
   q_ip:	Number
+});
+
+pumpwatchSchema.method("update", function(updates, callback) {
+  Object.assign(this, updates, {updatedAt: new Date()});
+  this.parent().parent().save(callback);
 });
 
 var CameraSchema = new Schema({
@@ -23,7 +28,7 @@ CameraSchema.method("update", function(updates, callback) {
   this.parent().parent().save(callback);
 });
 
-var monitorSchema = new Schema({
+var MonitorSchema = new Schema({
   monitor_type:	String,
   monitor_mounting:	String,
   monitor_position: String
@@ -35,7 +40,7 @@ var DocumentSchema = new Schema({
   createdAt:	{type: Date, default: Date.now},
   updatedAt:	{type: Date, default: Date.now},
   type:	String,
-  pw: [pumpwatchSchema],
+  pw: [PumpwatchSchema],
   ups:	Boolean,
   work_monitor:	Boolean,
   hybrid_quad:	Number,
@@ -56,7 +61,7 @@ var DocumentSchema = new Schema({
   ftp_cable:	Number,
   pipe:	Number,
   cameras:	[CameraSchema],
-  monitors: [monitorSchema],
+  monitors: [MonitorSchema],
   pole_4mtr:	Number,
   pole_6mtr:	Number,
   open_vpn:	Boolean,
