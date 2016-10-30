@@ -20,8 +20,8 @@ router.param("lID",  function(req, res, next, id){
 
 //Router to delete the document of the location
 router.param("dID", function(req, res, next, id){
-  console.log(req.documents);
   req.documents = req.location.documents.id(id);
+  console.log(req.documents);
   if(!req.documents) {
     err =  new Error("Not Found");
     err.status = 404;
@@ -81,6 +81,11 @@ router.post("/", function(req, res, next) {
 });
 
 ////////////// DOCUMENT ROUTERS ////////////
+//GET /locations/:lID/documents
+router.get("/:lID/documents/:dID", function(req, res, next) {
+  console.log('Get location');
+  res.json(req.documents);
+});
 
 //POST /locations/:lid/documents
 //Create a new document
