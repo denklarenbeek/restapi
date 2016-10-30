@@ -10,7 +10,7 @@ var PumpwatchSchema = new Schema({
   q_ip:	Number
 });
 
-pumpwatchSchema.method("update", function(updates, callback) {
+PumpwatchSchema.method("update", function(updates, callback) {
   Object.assign(this, updates, {updatedAt: new Date()});
   this.parent().parent().save(callback);
 });
