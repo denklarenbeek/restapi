@@ -148,7 +148,6 @@ router.get("/:lID/documents/:dID/cameras", function(req, res, next) {
 //POST /locations/:lID/documents/:dID/cameras/
 //Create a new camera
 router.post("/:lID/documents/:dID/cameras", function(req, res, next) {
-  console.log(req.documents.cameras);
   req.documents.cameras.push(req.body);
   req.location.save(function(err, camera){
     if(err) return next(err);
@@ -160,13 +159,21 @@ router.post("/:lID/documents/:dID/cameras", function(req, res, next) {
 //PUT /locations/:lID/documents/:dID/cameras/:cID
 //Edit a specific document
 router.put("/:lID/documents/:dID/cameras/:cID", function(req, res) {
-  console.log("put method");
-  console.log(req);
   req.cameras.update(req.body, function(err, result){
     if(err) return next(err);
     res.json(result);
   });
 });
 
+//DELETE /locations/:lID/documents/:dID
+//Delete a specific document
+router.delete("/:lID/documents/:dID/cameras/:cID", function(req, res) {
+  req.cameras.remove(function(err){
+    req.location.save(function(err, location){
+      if(err) return next(err);
+      res.json(location);
+    });
+  });
+});
 
 module.exports = router;
