@@ -16,10 +16,10 @@ PumpwatchSchema.method("update", function(updates, callback) {
 });
 
 var CameraSchema = new Schema({
-  camera_type:	String,
-  camera_mounting:	String,
-  camera_lens:	String,
-  camera_position: String,
+  type:	String,
+  mounting:	String,
+  lens:	String,
+  position: String,
   updatedAt: Date
 });
 

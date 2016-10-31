@@ -21,7 +21,7 @@ router.param("lID",  function(req, res, next, id){
 //Router to delete the document of the location
 router.param("dID", function(req, res, next, id){
   req.documents = req.location.documents.id(id);
-  console.log(req.documents);
+  // console.log(req.documents);
   if(!req.documents) {
     err =  new Error("Not Found");
     err.status = 404;
@@ -83,13 +83,14 @@ router.post("/", function(req, res, next) {
 ////////////// DOCUMENT ROUTERS ////////////
 //GET /locations/:lID/documents
 router.get("/:lID/documents/:dID", function(req, res, next) {
-  console.log('Get location');
+  console.log('Get document');
   res.json(req.documents);
 });
 
 //POST /locations/:lid/documents
 //Create a new document
 router.post("/:lID/documents", function(req, res, next) {
+  console.log(req.location.documents);
   req.location.documents.push(req.body);
   req.location.save(function(err, location){
     if(err) return next(err);
@@ -120,11 +121,27 @@ router.delete("/:lID/documents/:dID", function(req, res) {
 
 ////////////// CAMERA ROUTERS ////////////
 
+//GET locations/:lID/documents/:dID/cameras
+//GET all cameras
+router.get("/:lID/documents/:dID/cameras", function(req, res, next) {
+  Location.find({}, null, function(err, cameras){
+
+    //If error send them to error handler
+    if(err) return next(err);
+
+    //Return all the locations
+    res.json(cameras);
+  });
+});
+
 //POST /locations/:lID/documents/:dID/cameras/:cID
 //Create a new camera
 router.post("/:lID/documents/:dID/cameras", function(req, res, next) {
-  req.location.documents.cameras.push(req.body);
-  req.location.documents.save(function(err, camera){
+  console.log("req.location.documents");
+  console.log(req.location.documents[0].cameras);
+  console.log(req.body);
+  req.location.documents[0].cameras.push(req.body);
+  req.location.save(function(err, camera){
     if(err) return next(err);
     res.status(201);
     res.json(camera);
