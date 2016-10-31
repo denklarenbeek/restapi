@@ -18,7 +18,7 @@ router.param("lID",  function(req, res, next, id){
   })
 });
 
-//Router to delete the document of the location
+//RouterParam for document ID's
 router.param("dID", function(req, res, next, id){
   req.documents = req.location.documents.id(id);
   // console.log(req.documents);
@@ -30,7 +30,7 @@ router.param("dID", function(req, res, next, id){
   next();
 });
 
-//Router to delete the document of the location
+//RouterParam for camera ID's
 router.param("cID", function(req, res, next, id){
   req.cameras = req.documents.cameras.id(id);
   if(!req.cameras) {
@@ -41,7 +41,7 @@ router.param("cID", function(req, res, next, id){
   next();
 });
 
-//Router to delete the document of the location
+//RouterParam for pumpwatch ID's
 router.param("pID", function(req, res, next, id){
   req.pumpwatch = req.documents.pumpwatch.id(id);
   if(!req.pumpwatch) {
@@ -51,6 +51,20 @@ router.param("pID", function(req, res, next, id){
   }
   next();
 });
+
+//RouterParam for monitor ID's
+router.param("mID", function(req, res, next, id){
+  req.monitors = req.documents.monitors.id(id);
+  console.log(req.monitors);
+  if(!req.monitors) {
+    err =  new Error("Not Found");
+    err.status = 404;
+    return next(err);
+  }
+  next();
+});
+
+
 //GET /locations
 //Get all the locations
 router.get("/", function(req, res, next) {
@@ -212,6 +226,39 @@ router.put("/:lID/documents/:dID/pumpwatch/:pID", function(req, res) {
 //Delete a specific pumpwatch
 router.delete("/:lID/documents/:dID/pumpwatch/:pID", function(req, res) {
   req.pumpwatch.remove(function(err){
+    req.location.save(function(err, location){
+      if(err) return next(err);
+      res.json(location);
+    });
+  });
+});
+
+////////////// PumpWatch ROUTERS ////////////
+
+//POST /locations/:lID/documents/:dID/monitors/
+//Create a new monitor
+router.post("/:lID/documents/:dID/monitors", function(req, res, next) {
+  req.documents.monitors.push(req.body);
+  req.location.save(function(err, result){
+    if(err) return next(err);
+    res.status(201);
+    res.json(result);
+  });
+});
+
+//PUT /locations/:lID/documents/:dID/monitors/:mID
+//Edit a specific monitor
+router.put("/:lID/documents/:dID/monitors/:mID", function(req, res) {
+  req.monitors.update(req.body, function(err, result){
+    if(err) return next(err);
+    res.json(result);
+  });
+});
+
+//DELETE /locations/:lID/documents/:dID/monitors/:mID
+//Delete a specific pumpwatch
+router.delete("/:lID/documents/:dID/monitors/:mID", function(req, res) {
+  req.monitors.remove(function(err){
     req.location.save(function(err, location){
       if(err) return next(err);
       res.json(location);

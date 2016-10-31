@@ -29,9 +29,15 @@ CameraSchema.method("update", function(updates, callback) {
 });
 
 var MonitorSchema = new Schema({
-  monitor_type:	String,
-  monitor_mounting:	String,
-  monitor_position: String
+  type:	String,
+  mounting:	String,
+  position: String,
+  connection: String
+});
+
+MonitorSchema.method("update", function(updates, callback) {
+  Object.assign(this, updates, {updatedAt: new Date()});
+  this.parent().parent().save(callback);
 });
 
 var DocumentSchema = new Schema({
