@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var PumpwatchSchema = new Schema({
-  pw_type:	String,
+  type:	String,
   q_analog:	Number,
   q_ip:	Number
 });
@@ -40,7 +40,7 @@ var DocumentSchema = new Schema({
   createdAt:	{type: Date, default: Date.now},
   updatedAt:	{type: Date, default: Date.now},
   type:	String,
-  pw: [PumpwatchSchema],
+  pumpwatch: [PumpwatchSchema],
   ups:	Boolean,
   work_monitor:	Boolean,
   hybrid_quad:	Number,

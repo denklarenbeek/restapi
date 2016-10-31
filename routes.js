@@ -41,6 +41,16 @@ router.param("cID", function(req, res, next, id){
   next();
 });
 
+//Router to delete the document of the location
+router.param("pID", function(req, res, next, id){
+  req.pumpwatch = req.documents.pumpwatch.id(id);
+  if(!req.pumpwatch) {
+    err =  new Error("Not Found");
+    err.status = 404;
+    return next(err);
+  }
+  next();
+});
 //GET /locations
 //Get all the locations
 router.get("/", function(req, res, next) {
@@ -169,6 +179,39 @@ router.put("/:lID/documents/:dID/cameras/:cID", function(req, res) {
 //Delete a specific document
 router.delete("/:lID/documents/:dID/cameras/:cID", function(req, res) {
   req.cameras.remove(function(err){
+    req.location.save(function(err, location){
+      if(err) return next(err);
+      res.json(location);
+    });
+  });
+});
+
+////////////// PumpWatch ROUTERS ////////////
+
+//POST /locations/:lID/documents/:dID/pumpwatch/
+//Create a new pumpwatch
+router.post("/:lID/documents/:dID/pumpwatch", function(req, res, next) {
+  req.documents.pumpwatch.push(req.body);
+  req.location.save(function(err, camera){
+    if(err) return next(err);
+    res.status(201);
+    res.json(camera);
+  });
+});
+
+//PUT /locations/:lID/documents/:dID/pumpwatch/:pID
+//Edit a specific pumpwatch
+router.put("/:lID/documents/:dID/pumpwatch/:pID", function(req, res) {
+  req.pumpwatch.update(req.body, function(err, result){
+    if(err) return next(err);
+    res.json(result);
+  });
+});
+
+//DELETE /locations/:lID/documents/:dID/pumpwatch/:pID
+//Delete a specific pumpwatch
+router.delete("/:lID/documents/:dID/pumpwatch/:pID", function(req, res) {
+  req.pumpwatch.remove(function(err){
     req.location.save(function(err, location){
       if(err) return next(err);
       res.json(location);
