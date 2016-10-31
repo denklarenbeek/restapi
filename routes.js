@@ -30,6 +30,17 @@ router.param("dID", function(req, res, next, id){
   next();
 });
 
+//Router to delete the document of the location
+router.param("cID", function(req, res, next, id){
+  req.cameras = req.documents.cameras.id(id);
+  if(!req.cameras) {
+    err =  new Error("Not Found");
+    err.status = 404;
+    return next(err);
+  }
+  next();
+});
+
 //GET /locations
 //Get all the locations
 router.get("/", function(req, res, next) {
@@ -134,18 +145,28 @@ router.get("/:lID/documents/:dID/cameras", function(req, res, next) {
   });
 });
 
-//POST /locations/:lID/documents/:dID/cameras/:cID
+//POST /locations/:lID/documents/:dID/cameras/
 //Create a new camera
 router.post("/:lID/documents/:dID/cameras", function(req, res, next) {
-  console.log("req.location.documents");
-  console.log(req.location.documents[0].cameras);
-  console.log(req.body);
-  req.location.documents[0].cameras.push(req.body);
+  console.log(req.documents.cameras);
+  req.documents.cameras.push(req.body);
   req.location.save(function(err, camera){
     if(err) return next(err);
     res.status(201);
     res.json(camera);
   });
 });
+
+//PUT /locations/:lID/documents/:dID/cameras/:cID
+//Edit a specific document
+router.put("/:lID/documents/:dID/cameras/:cID", function(req, res) {
+  console.log("put method");
+  console.log(req);
+  req.cameras.update(req.body, function(err, result){
+    if(err) return next(err);
+    res.json(result);
+  });
+});
+
 
 module.exports = router;
